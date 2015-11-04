@@ -188,7 +188,7 @@
 ;;
 
 (defn dispatch
-  "Send an event to be processed by the registered handler.
+  "Queue an event to be processed by the registered handler.
 
   Usage example:
      (dispatch [:delete-item 42])
