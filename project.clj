@@ -9,14 +9,14 @@
 
   :profiles {:debug {:debug true}
              :dev   {:dependencies [[spellhouse/clairvoyant "0.0-48-gf5e59d3"]]
-                     :plugins      [[lein-cljsbuild "1.0.5"]
+                     :plugins      [[lein-cljsbuild "1.1.0"]
+                                    [lein-figwheel "0.3.8"]
                                     [com.cemerick/clojurescript.test "0.3.3"]]}}
 
   :clean-targets [:target-path "run/compiled"]
-
   :resource-paths ["run/resources"]
   :jvm-opts ["-Xmx1g" "-XX:+UseConcMarkSweepGC"]
-  :source-paths []
+  :source-paths ["src"]
   :test-paths ["test"]
 
   :cljsbuild {:builds        [{:id           "test"                                                                   ;; currently bogus, there is no demo or tests
