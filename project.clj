@@ -19,16 +19,25 @@
   :source-paths ["src"]
   :test-paths ["test"]
 
-  :cljsbuild {:builds        [{:id           "test"                                                                   ;; currently bogus, there is no demo or tests
+  :cljsbuild {:builds        [{:id           "test_latest"                                                            ;; currently bogus, there is no demo or tests
                                :source-paths ["src" "test"]
-                               :compiler     {:output-to     "run/compiled/test.js"
-                                              :source-map    "run/compiled/test.js.map"
-                                              :output-dir    "run/compiled/test"
+                               :compiler     {:output-to     "run/compiled/latest/test.js"
+                                              :source-map    "run/compiled/latest/test.js.map"
+                                              :output-dir    "run/compiled/latest/test"
                                               :optimizations :simple                                                  ;; https://github.com/cemerick/clojurescript.test/issues/68
-                                              :pretty-print  true}}]
+                                              :pretty-print  true}}
+                              {:id           "test_v041"                                                              ;; currently bogus, there is no demo or tests
+                               :source-paths ["src" "test"]
+                               :compiler     {:closure-defines {"re_frame.config.core_compatible_with" "v041"}
+                                              :output-to       "run/compiled/v041/test.js"
+                                              :source-map      "run/compiled/v041/test.js.map"
+                                              :output-dir      "run/compiled/v041/test"
+                                              :optimizations   :simple                                                ;; https://github.com/cemerick/clojurescript.test/issues/68
+                                              :pretty-print    true}}]
 
-              :test-commands {"phantom" ["phantomjs" :runner "run/compiled/test.js"]}}                                ; doesn't work with phantomjs < 2.0.0
+              :test-commands {"phantom_latest" ["phantomjs" :runner "run/compiled/latest/test.js"]
+                              "phantom_v041"   ["phantomjs" :runner "run/compiled/v041/test.js"]}}                    ; doesn't work with phantomjs < 2.0.0
 
   :aliases {"auto" ["do" "clean," "cljsbuild" "clean," "cljsbuild" "auto" "demo,"]
             "once" ["do" "clean," "cljsbuild" "clean," "cljsbuild" "once" "demo,"]
-            "test" ["do" "clean," "cljsbuild" "once," "cljsbuild" "test" "phantom"]})
+            "test" ["do" "clean," "cljsbuild" "test" "phantom_latest," "cljsbuild" "test" "phantom_v041"]})
