@@ -1,6 +1,7 @@
 (ns re-frame.core
   (:require [re-frame.v041-api :as v041-api]
             [re-frame.v041-router :as v041-router]
+            [re-frame.router :as router]
             [re-frame.config :as config]
             [re-frame.middleware :as middleware]))
 
@@ -17,9 +18,6 @@
 
 ; the default instance of re-frame
 (def app-frame (v041-api/make-frame-atom))
-
-; the default event queue
-(def event-chan (v041-router/make-event-chan))
 
 ; --  API  ----------------------------------------------------------------------------------------------------------
 
@@ -46,15 +44,16 @@ Usage example:
 
 ; --  router  -------------------------------------------------------------------------------------------------------
 
-(def dispatch
-  "Send an event to be processed by the registered handler.
+(when (= config/core-compatible-with "v041")
+  ; the default event queue
+  (def event-chan (v041-router/make-event-chan))
+  (def dispatch (partial v041-router/dispatch event-chan app-frame))
+  (def run-router-loop (partial v041-router/run-router-loop event-chan app-db app-frame)))
 
-Usage example:
-   (dispatch [:delete-item 42])
-"
-  (partial v041-router/dispatch event-chan app-frame))
-
-(def run-router-loop (partial v041-router/run-router-loop event-chan app-db app-frame))
+(when (= config/core-compatible-with "v050")
+  ; the default event queue
+  (def event-queue (router/make-event-queue app-frame app-db))
+  (def dispatch (partial router/dispatch event-queue app-frame)))
 
 ; --  middleware  ---------------------------------------------------------------------------------------------------
 
@@ -68,5 +67,6 @@ Usage example:
 
 ; --  event processing  ---------------------------------------------------------------------------------------------
 
-(if config/run-loop-automatically
-  (run-router-loop))
+(when (= config/core-compatible-with "v041")
+  (if config/run-loop-automatically
+    (run-router-loop)))
