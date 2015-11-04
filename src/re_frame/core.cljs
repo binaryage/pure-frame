@@ -50,13 +50,13 @@ Usage example:
 
 ; --  router  -------------------------------------------------------------------------------------------------------
 
-(when (= config/core-compatible-with "v041")
+(when (= config/core-implements "v041")
   ; the default event queue
   (def event-queue (v041-router/make-event-chan))
   (def dispatch (partial v041-router/dispatch event-queue app-frame))
   (def run-router-loop (partial v041-router/run-router-loop event-queue app-db app-frame)))
 
-(when (= config/core-compatible-with "v050")
+(when (= config/core-implements "v050")
   ; the default event queue
   (def event-queue (router/make-event-queue app-frame app-db))
   (def dispatch (partial router/dispatch event-queue app-frame)))
@@ -73,6 +73,6 @@ Usage example:
 
 ; --  event processing  ---------------------------------------------------------------------------------------------
 
-(when (= config/core-compatible-with "v041")
+(when (= config/core-implements "v041")
   (if config/run-loop-automatically
     (run-router-loop)))

@@ -19,20 +19,20 @@
   :source-paths ["src"]
   :test-paths ["test"]
 
-  :cljsbuild {:builds        [{:id           "test_latest"                                                            ;; currently bogus, there is no demo or tests
+  :cljsbuild {:builds        [{:id           "test_latest"
                                :source-paths ["src" "test"]
                                :compiler     {:output-to     "run/compiled/latest/test.js"
                                               :source-map    "run/compiled/latest/test.js.map"
                                               :output-dir    "run/compiled/latest/test"
-                                              :optimizations :simple                                                  ;; https://github.com/cemerick/clojurescript.test/issues/68
+                                              :optimizations :simple                                                  ; https://github.com/cemerick/clojurescript.test/issues/68
                                               :pretty-print  true}}
-                              {:id           "test_v041"                                                              ;; currently bogus, there is no demo or tests
+                              {:id           "test_v041"
                                :source-paths ["src" "test"]
-                               :compiler     {:closure-defines {"re_frame.config.core_compatible_with" "v041"}
+                               :compiler     {:closure-defines {"re_frame.config.core_implements" "v041"}
                                               :output-to       "run/compiled/v041/test.js"
                                               :source-map      "run/compiled/v041/test.js.map"
                                               :output-dir      "run/compiled/v041/test"
-                                              :optimizations   :simple                                                ;; https://github.com/cemerick/clojurescript.test/issues/68
+                                              :optimizations   :simple                                                ; https://github.com/cemerick/clojurescript.test/issues/68
                                               :pretty-print    true}}]
 
               :test-commands {"phantom_latest" ["phantomjs" :runner "run/compiled/latest/test.js"]

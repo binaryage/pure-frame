@@ -17,21 +17,23 @@ In your project you should require `re-frame.frame` and call `make-frame` to cre
 For backward compatibility you can require `re-frame.core` where you get compatible interface to original re-frame.
 
 Pure-frame is pretty flexible, so I have implemented two compatibility modes
-* v041 - mode implements re-frame 0.4.1 (event queue is a core.async channel)
-* v050 - (default) mode implements re-frame 0.5.0 (event queue is a custom finite state machine)
+* *v050* - (default) mode implements re-frame 0.5.0 (event queue is a custom finite state machine)
+* *v041* - mode implements re-frame 0.4.1 (event queue is a core.async channel)
 
 You can specify closure-define in your project.clj to get 0.4.1 behaviour:
 ```clojure
-:closure-defines {"re_frame.config.core_compatible_with" "v041"} ; add this to your cljsbuild :compiler options
+:closure-defines {"re_frame.config.core_implements" "v041"} ; add this to your cljsbuild :compiler options
 ```
 
 Those implementations can serve as examples how to use low-level re-frame.frame parts.
 
-[v041_api.cljs](src/re_frame/v041_api.cljs)
-[v041_router.cljs](src/re_frame/v041_router.cljs)
-[router.cljs](src/re_frame/router.cljs)
+* [v041_api.cljs](src/re_frame/v041_api.cljs)
+* [v041_router.cljs](src/re_frame/v041_router.cljs)
+* [router.cljs](src/re_frame/router.cljs)
 
-* there is one global app-db, one global app-frame and one global event queue
+By including `re-frame.core` you get:
+
+* one global app-db, one global app-frame and one global event queue
 * app-db is backed by reagent/atom
 * app-frame has default loggers
 * familiar original re-frame api shim is provided in `re-frame.core`
