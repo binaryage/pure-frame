@@ -1,7 +1,7 @@
 The MIT License (MIT)
 
 Copyright (c) 2015 Michael Thompson and contributors
-https://github.com/darwin/re-frame/graphs/contributors
+https://github.com/binaryage/pure-frame/graphs/contributors
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

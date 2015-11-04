@@ -13,6 +13,4 @@ out/
 target/
 compiled/
 misc/
-/examples/todomvc/resources/public/js/
-/examples/simple/resources/public/js/
 figwheel_server.log

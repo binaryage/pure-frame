@@ -1,6 +1,6 @@
-(defproject re-frame "0.5.0-TRANSDUCERS"
+(defproject binaryage/pure-frame "0.1.0"
   :description "A Clojurescript MVC-like Framework For Writing SPAs Using Reagent."
-  :url "https://github.com/Day8/re-frame.git"
+  :url "https://github.com/binaryage/pure-frame.git"
   :license {:name "MIT"}
   :dependencies [[org.clojure/clojure "1.7.0"]
                  [org.clojure/clojurescript "1.7.145"]
