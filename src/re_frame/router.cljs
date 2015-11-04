@@ -2,10 +2,11 @@
   (:refer-clojure :exclude [flush])
   (:require [reagent.core :refer [flush]]
             [reagent.impl.batching :refer [do-later]]
-            [re-frame.handlers :refer [handle]]
-            [re-frame.utils :refer [warn error]]
+            [re-frame.logging :refer [error]]
+            [re-frame.frame :as frame]
             [goog.async.nextTick]))
 
+; implement re-frame 0.5.0-style router
 
 ;; -- Router Loop ------------------------------------------------------------
 ;;
@@ -74,7 +75,7 @@
 
 
 ;; Want to understand this? Look at FSM in -fsm-trigger?
-(deftype EventQueue [^:mutable fsm-state ^:mutable queue]
+(deftype EventQueue [frame-atom db-atom ^:mutable fsm-state ^:mutable queue]
   IEventQueue
 
   (enqueue [this event]
@@ -89,7 +90,7 @@
     [this]
     (let [event-v (peek queue)]
       (try
-        (handle event-v)
+        (frame/process-event-on-atom! @frame-atom db-atom event-v)
         (catch :default ex
           (-fsm-trigger this :exception ex)))
       (set! queue (pop queue))))
@@ -176,8 +177,8 @@
 ;; will "run" and the event will be "handled" by the registered event handler.
 ;;
 
-(def event-queue (->EventQueue :quiescent #queue []))
-
+(defn make-event-queue [frame-atom db-atom]
+  (->EventQueue frame-atom db-atom :quiescent #queue []))
 
 ;; ---------------------------------------------------------------------------
 ;; Dispatching
@@ -189,20 +190,8 @@
   Usage example:
      (dispatch [:delete-item 42])
   "
-  [event-v]
+  [event-queue frame-atom event-v]
   (if (nil? event-v)
-    (error "re-frame: \"dispatch\" is ignoring a nil event.") ;; nil would close the channel
+    (error @frame-atom "re-frame: \"dispatch\" is ignoring a nil event.") ;; nil would close the channel
     (enqueue event-queue event-v))
   nil)                                                      ;; Ensure nil return. See https://github.com/Day8/re-frame/wiki/Beware-Returning-False
-
-
-(defn dispatch-sync
-  "Send an event to be processed by the registered handler, but avoid the async-inducing
-  use of core.async/chan.
-
-  Usage example:
-     (dispatch-sync [:delete-item 42])"
-  [event-v]
-  (handle event-v)
-  nil)                                                      ;; Ensure nil return. See https://github.com/Day8/re-frame/wiki/Beware-Returning-False
-
