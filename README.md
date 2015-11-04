@@ -14,13 +14,26 @@ is expressed as a tranducer which allows great flexibility.
 
 In your project you should require `re-frame.frame` and call `make-frame` to create your own re-frame instance(s).
 
-For backward compatibility you can require `re-frame.core` you get compatible interface to the re-frame v0.4.1.
-In [v041_api.cljs](blob/master/src/re_frame/v041_api.cljs) you can see how was old re-frame implemented on top of `re-frame.frame`:
+For backward compatibility you can require `re-frame.core` where you get compatible interface to original re-frame.
 
-* there is one global app-db and one global app-frame
+Pure-frame is pretty flexible, so I have implemented two compatibility modes
+* v041 - mode implements re-frame 0.4.1 (event queue is a core.async channel)
+* v050 - (default) mode implements re-frame 0.5.0 (event queue is a custom finite state machine)
+
+You can specify closure-define in your project.clj to get 0.4.1 behaviour:
+```clojure
+:closure-defines {"re_frame.config.core_compatible_with" "v041"} ; add this to your cljsbuild :compiler options
+```
+
+Those implementations can serve as examples how to use low-level re-frame.frame parts.
+
+[v041_api.cljs](src/re_frame/v041_api.cljs)
+[v041_router.cljs](src/re_frame/v041_router.cljs)
+[router.cljs](src/re_frame/router.cljs)
+
+* there is one global app-db, one global app-frame and one global event queue
 * app-db is backed by reagent/atom
 * app-frame has default loggers
-* router event queue is implemented using core.async channel
 * familiar original re-frame api shim is provided in `re-frame.core`
 
 I decided to remove some functionality of original re-frame, because I don't personally use it and didn't want to
@@ -30,4 +43,4 @@ port it over:
 * removed pure middleware, because it makes no sense in the new model
 * removed some sanity checks of wrong usage of middle-ware factories to simplify the code a bit
 
-Also I have added some tests.
+Also I have added [some tests](test/re_frame/test).

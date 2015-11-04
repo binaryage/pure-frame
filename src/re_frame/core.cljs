@@ -5,13 +5,19 @@
             [re-frame.config :as config]
             [re-frame.middleware :as middleware]))
 
-; this file provides public API to default re-frame setup
-; note: by including this namespace, you will get default app-db, default app-frame and default event channel
-; plus it will start default router-loop automatically
-
+; This file provides public API to re-frame compatible setup. It is inteded to help you switch to pure-frame or
+; as an example how to use low-level frame library.
+;
+; Normally you are expected not to include this namespace and use re-frame.frame namespace directly.
+;
+; This namespace provides backward compatibility with re-frame 0.5.0 (or 0.4.1).
+; By including this namespace, you will create global app-db, app-frame and event queue and use them by default.
+;
 ; * app-db is backed by reagent/atom
 ; * app-frame has default loggers
-; * router event channel is implemented using core.async channel
+; * event queue is
+;   * mini finite-state-machine as implemented by re-frame 0.5.0
+;   * or core.async channel as implementeted by re-frame 0.4.1
 
 ; the default instance of app-db
 (def app-db (v041-api/make-app-db-atom))
@@ -46,9 +52,9 @@ Usage example:
 
 (when (= config/core-compatible-with "v041")
   ; the default event queue
-  (def event-chan (v041-router/make-event-chan))
-  (def dispatch (partial v041-router/dispatch event-chan app-frame))
-  (def run-router-loop (partial v041-router/run-router-loop event-chan app-db app-frame)))
+  (def event-queue (v041-router/make-event-chan))
+  (def dispatch (partial v041-router/dispatch event-queue app-frame))
+  (def run-router-loop (partial v041-router/run-router-loop event-queue app-db app-frame)))
 
 (when (= config/core-compatible-with "v050")
   ; the default event queue
