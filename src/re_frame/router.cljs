@@ -140,9 +140,10 @@
     (let [[new-state action-fn]
           (case [fsm-state trigger]
 
-            ; Here is the FSM
-            ;[current-state :trigger]  [:new-state  action-fn]
+            ;; Here is the FSM
+            ;; [current-state trigger] [new-state action-fn]
 
+            ;; the queue is idle
             [:quiescent :add-event] [:scheduled #(do (-add-event this arg)
                                                      (-run-next-tick this))]
 
@@ -162,7 +163,7 @@
             [:paused :add-event   ] [:paused   #(-add-event this arg)]
             [:paused :begin-resume] [:resuming #(-begin-resume this)]
 
-            ;; processing an event which previously caused the queue to be paused
+            ;; processing the event that caused the queue to be paused
             [:resuming :add-event    ] [:resuming  #(-add-event this arg)]
             [:resuming :exception    ] [:quiescent #(-exception this arg)]
             [:resuming :finish-resume] [:running   #(-run-queue this)]
