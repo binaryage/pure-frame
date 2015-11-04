@@ -49,7 +49,6 @@
 (defn unregister-handler [frame-atom event-id]
   (swap! frame-atom #(frame/unregister-event-handler % event-id)))
 
-
 (defn dispatch-sync [db-atom frame-atom event]
   (frame/process-event-on-atom! @frame-atom db-atom event)
   nil)                                                                                                                ; Ensure nil return. See https://github.com/Day8/re-frame/wiki/Beware-Returning-False

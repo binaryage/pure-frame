@@ -1,16 +1,23 @@
 (ns re-frame.v041-router
   (:refer-clojure :exclude [flush])
-  (:require-macros [cljs.core.async.macros :refer [go-loop go]])
-  (:require [cljs.core.async :refer [chan put! <! timeout close!]]
+  (:require-macros [cljs.core.async.macros :refer [go-loop]])
+  (:require [cljs.core.async :refer [chan put! <! timeout close! poll!]]
             [goog.async.nextTick]
             [reagent.core :as reagent]
             [re-frame.frame :as frame]
             [re-frame.logging :refer [error]]))
 
-; implement re-frame 0.4.1 router functionality using core.async channel
+; implement re-frame 0.4.1 router using core.async channel
 
 (defn make-event-chan [& args]
   (apply chan args))                                                                                                  ; TODO: set buffer size?
+
+(defn purge-chan
+  "Read all pending events from the channel and drop them on the floor."
+  [event-chan]
+  (go-loop []
+    (if-not (nil? (poll! event-chan))
+      (recur))))
 
 ; -- router loop ----------------------------------------------------------------------------------------------------
 ;
@@ -52,9 +59,9 @@
         ;     event which just fell in a screaming heap. Not sane to handle further
         ;     events if the prior event failed.
         (catch js/Object e
-          (do
-            (run-router-loop event-chan db-atom frame-atom)                                                           ; Exception throw will cause termination of go-loop. So, start another.
-            (throw e)))))                                                                                             ; re-throw so the rest of the app's infrastructure (window.onerror?) gets told
+          (purge-chan event-chan)                                                                                     ; get rid of any pending events
+          (run-router-loop event-chan db-atom frame-atom)                                                             ; Exception throw will cause termination of go-loop. So, start another.
+          (throw e))))                                                                                                ; re-throw so the rest of the app's infrastructure (window.onerror?) gets told
     (recur)))
 
 ; -- dispatch -------------------------------------------------------------------------------------------------------
