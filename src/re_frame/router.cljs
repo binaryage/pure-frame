@@ -72,7 +72,7 @@
   (-run-queue [this])
   (-pause-run [this])
   (-exception [this ex])
-  (-resume-run [this]))
+  (-begin-resume [this]))
 
 
 ;; Want to understand this? Look at FSM in -fsm-trigger?
@@ -128,7 +128,7 @@
                     (:yield m)     goog.async.nextTick)]   ;; almost immediately
       (later #(-fsm-trigger this :begin-resume nil))))
 
-  (-resume-run
+  (-begin-resume
     [this]
     (-process-1st-event this)               ;; do the event which paused processing
     (-fsm-trigger this :finish-resume nil)) ;; do the rest of the queued events
@@ -138,7 +138,7 @@
 
     ;; work out new FSM state and action function for the transition
     (let [[new-state action-fn]
-          (condp = [fsm-state trigger]
+          (case [fsm-state trigger]
 
             ; Here is the FSM
             ;[current-state :trigger]  [:new-state  action-fn]
@@ -159,7 +159,7 @@
 
             ;; event processing is paused - probably by :flush-dom metadata
             [:paused :add-event    ]  [:paused   #(-add-event this arg1)]
-            [:paused :begin-resume ]  [:resuming #(-resume-run this)]
+            [:paused :begin-resume ]  [:resuming #(-begin-resume this)]
 
             ;; processing an event which previously caused the queue to be paused
             [:resuming :add-event    ] [:resuming  #(-add-event this arg1)]
