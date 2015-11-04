@@ -2,13 +2,13 @@
   (:require-macros [cemerick.cljs.test :refer (is deftest testing done)]
                    [reagent.ratom :refer [reaction run!]])
   (:require [cemerick.cljs.test]
-            [re-frame.core :as core]
-            [re-frame.v041-api :as v041-api]))
+            [re-frame.core :as core]))
 
 (defn reinitialize! []
   ; TODO: figure out, how to force channel flush
-  (reset! core/app-db @(v041-api/make-app-db-atom))
-  (reset! core/app-frame @(v041-api/make-frame-atom)))
+  (reset! core/app-db nil)
+  (core/clear-sub-handlers! core/app-frame)
+  (core/clear-event-handlers! core/app-frame))
 
 (deftest modify-app-db-sync
   (testing "modify app-db via handler (sync)"
