@@ -1,6 +1,6 @@
 # pure-frame: a re-frame fork
 
-[![Build Status](https://travis-ci.org/darwin/pure-frame.svg)](https://travis-ci.org/binaryage/pure-frame)
+[![Build Status](https://travis-ci.org/binaryage/pure-frame.svg?branch=master)](https://travis-ci.org/binaryage/pure-frame)
 
 This is a fork of [re-frame](https://github.com/Day8/re-frame) originated in [PR #107](https://github.com/Day8/re-frame/pull/107)
 
