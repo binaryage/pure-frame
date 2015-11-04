@@ -1,62 +1,16 @@
-(ns re-frame.v041
+(ns re-frame.v041-router
   (:refer-clojure :exclude [flush])
   (:require-macros [cljs.core.async.macros :refer [go-loop go]])
   (:require [cljs.core.async :refer [chan put! <! timeout close!]]
             [goog.async.nextTick]
             [reagent.core :as reagent]
             [re-frame.frame :as frame]
-            [re-frame.logging :refer [log warn error]]
-            [re-frame.utils :as utils]))
+            [re-frame.logging :refer [error]]))
 
-; implement re-frame 0.4.1 functionality on top reusable re-frame parts
-
-(defn make-app-db-atom [& args]
-  (apply reagent/atom args))
-
-(defn make-frame-atom [& args]
-  (atom (apply frame/make-frame args)))
+; implement re-frame 0.4.1 router functionality using core.async channel
 
 (defn make-event-chan [& args]
   (apply chan args))                                                                                                  ; TODO: set buffer size?
-
-; -- re-frame 0.4.1 interface  --------------------------------------------------------------------------------------
-
-(defn set-loggers! [frame-atom new-loggers]
-  (swap! frame-atom #(frame/set-loggers % new-loggers)))
-
-(defn register-sub [frame-atom subscription-id handler-fn]
-  (swap! frame-atom #(frame/register-subscription-handler % subscription-id handler-fn)))
-
-(defn unregister-sub [frame-atom subscription-id]
-  (swap! frame-atom #(frame/unregister-subscription-handler % subscription-id)))
-
-(defn clear-sub-handlers! [frame-atom]
-  (swap! frame-atom #(frame/clear-subscription-handlers %)))
-
-(defn legacy-subscribe [frame-atom db-atom subscription-spec]
-  (let [subscription-id (utils/get-subscription-id subscription-spec)
-        handler-fn (get-in @frame-atom [:subscriptions subscription-id])]
-    (if (nil? handler-fn)
-      (error @frame-atom
-        "re-frame: no subscription handler registered for: \"" subscription-id "\".  Returning a nil subscription.")
-      (handler-fn db-atom subscription-spec))))
-
-(def subscribe legacy-subscribe)
-
-(defn clear-event-handlers! [frame-atom]
-  (swap! frame-atom #(frame/clear-event-handlers %)))
-
-; -- composing middleware  ------------------------------------------------------------------------------------------
-
-(defn register-handler
-  ([frame-atom event-id handler-fn]
-   (swap! frame-atom #(frame/register-event-handler % event-id handler-fn)))
-  ([frame-atom event-id middleware handler-fn]
-   (if-let [mid-ware (utils/compose-middleware @frame-atom middleware)]                                               ; compose the middleware
-     (register-handler frame-atom event-id (mid-ware handler-fn)))))                                                  ; wrap the handler in the middleware
-
-(defn unregister-handler [frame-atom event-id]
-  (swap! frame-atom #(frame/unregister-event-handler % event-id)))
 
 ; -- router loop ----------------------------------------------------------------------------------------------------
 ;
@@ -109,8 +63,4 @@
   (if (nil? event)
     (error @frame-atom "re-frame: \"dispatch\" is ignoring a nil event.")                                             ; nil would close the channel
     (put! event-chan event))
-  nil)                                                                                                                ; Ensure nil return. See https://github.com/Day8/re-frame/wiki/Beware-Returning-False
-
-(defn dispatch-sync [db-atom frame-atom event]
-  (frame/process-event-on-atom! @frame-atom db-atom event)
   nil)                                                                                                                ; Ensure nil return. See https://github.com/Day8/re-frame/wiki/Beware-Returning-False

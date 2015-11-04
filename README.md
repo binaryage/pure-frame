@@ -1,6 +1,6 @@
 # pure-frame: a re-frame fork
 
-[![Build Status](https://travis-ci.org/binaryage/pure-frame.svg?branch=master)](https://travis-ci.org/binaryage/pure-frame)
+[![Build Status](https://travis-ci.org/darwin/pure-frame.svg)](https://travis-ci.org/binaryage/pure-frame)
 
 This is a fork of [re-frame](https://github.com/Day8/re-frame) originated in [PR #107](https://github.com/Day8/re-frame/pull/107)
 
@@ -15,7 +15,7 @@ is expressed as a tranducer which allows great flexibility.
 In your project you should require `re-frame.frame` and call `make-frame` to create your own re-frame instance(s).
 
 For backward compatibility you can require `re-frame.core` you get compatible interface to the re-frame v0.4.1.
-In [v041.cljs](blob/master/src/re_frame/v041.cljs) you can see how was old re-frame implemented on top of `re-frame.frame`:
+In [v041_api.cljs](blob/master/src/re_frame/v041_api.cljs) you can see how was old re-frame implemented on top of `re-frame.frame`:
 
 * there is one global app-db and one global app-frame
 * app-db is backed by reagent/atom
