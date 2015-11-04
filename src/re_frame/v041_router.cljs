@@ -58,7 +58,7 @@
         ;   - purge any pending events, because they are probably related to the
         ;     event which just fell in a screaming heap. Not sane to handle further
         ;     events if the prior event failed.
-        (catch js/Object e
+        (catch :default e
           (purge-chan event-chan)                                                                                     ; get rid of any pending events
           (run-router-loop event-chan db-atom frame-atom)                                                             ; Exception throw will cause termination of go-loop. So, start another.
           (throw e))))                                                                                                ; re-throw so the rest of the app's infrastructure (window.onerror?) gets told
