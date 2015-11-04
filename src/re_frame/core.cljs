@@ -1,6 +1,7 @@
 (ns re-frame.core
   (:require [re-frame.v041-api :as v041-api]
             [re-frame.v041-router :as v041-router]
+            [re-frame.config :as config]
             [re-frame.middleware :as middleware]))
 
 ; this file provides public API to default re-frame setup
@@ -65,7 +66,7 @@ Usage example:
 (def log-ex (middleware/log-ex app-frame))
 (def on-changes (middleware/on-changes app-frame))
 
-
 ; --  event processing  ---------------------------------------------------------------------------------------------
 
-(run-router-loop)
+(if config/run-loop-automatically
+  (run-router-loop))
