@@ -1,4 +1,4 @@
-# pure-frame: a re-frame fork [![Build Status](https://travis-ci.org/binaryage/pure-frame.svg?branch=master)](https://travis-ci.org/binaryage/pure-frame)
+# pure-frame [![Build Status](https://travis-ci.org/binaryage/pure-frame.svg?branch=master)](https://travis-ci.org/binaryage/pure-frame)
 
 [![Clojars Project](http://clojars.org/binaryage/pure-frame/latest-version.svg)](http://clojars.org/binaryage/pure-frame)
 
@@ -16,7 +16,8 @@ In your project you should require `re-frame.frame` and call `make-frame` to cre
 
 For backward compatibility you can require `re-frame.core` where you get compatible interface to original re-frame.
 
-Pure-frame is pretty flexible, so I have implemented two compatibility modes
+Pure-frame is pretty flexible, so I have implemented two compatibility modes:
+
 * *v050* - (default) mode implements re-frame 0.5.0 (event queue is a custom finite state machine)
 * *v041* - mode implements re-frame 0.4.1 (event queue is a core.async channel)
 
