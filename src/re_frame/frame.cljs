@@ -9,7 +9,7 @@
 (defrecord Frame [handlers subscriptions loggers]
   IFrame)
 
-; -- construction ----------------------------------------------------------------------------------------------------
+; -- construction -----------------------------------------------------------------------------------------------------------
 
 (defn make-frame
   "Constructs an independent frame instance."
@@ -22,7 +22,7 @@
           (map? loggers)]}
    (Frame. handlers subscriptions loggers)))
 
-; -- event handlers --------------------------------------------------------------------------------------------------
+; -- event handlers ---------------------------------------------------------------------------------------------------------
 
 (defn register-event-handler
   "Register a handler for an event."
@@ -45,7 +45,7 @@
   [frame]
   (assoc frame :handlers nil))
 
-; -- subscriptions --------------------------------------------------------------------------------------------------
+; -- subscriptions ----------------------------------------------------------------------------------------------------------
 
 (defn register-subscription-handler
   "Registers a subscription handler function for an id."
@@ -78,14 +78,14 @@
              "re-frame: no subscription handler registered for: \"" subscription-id "\".  Returning a nil subscription.")
       (apply handler-fn subscription-spec))))
 
-; -- utilities ------------------------------------------------------------------------------------------------------
+; -- utilities --------------------------------------------------------------------------------------------------------------
 
 (defn set-loggers
   "Resets loggers."
   [frame new-loggers]
   (assoc frame :loggers new-loggers))
 
-; -- transducers ----------------------------------------------------------------------------------------------------
+; -- transducers ------------------------------------------------------------------------------------------------------------
 ;
 ; see http://clojure.org/transducers[1]
 
@@ -121,7 +121,7 @@ outside by the process doing actual transduction. See event processing helpers b
   ([frame] (get-frame-transducer frame identity))
   ([frame db-selector] ((frame-transducer-factory frame) db-selector)))
 
-; -- event processing -----------------------------------------------------------------------------------------------
+; -- event processing -------------------------------------------------------------------------------------------------------
 
 (defn process-event [frame init-db event]
   (let [reducing-fn (fn [_old-state new-state] new-state)
@@ -157,7 +157,7 @@ outside by the process doing actual transduction. See event processing helpers b
         xform (get-frame-transducer frame identity)]
     (transduce xform reducing-fn @db-atom events)))
 
-; -- nice to have ---------------------------------------------------------------------------------------------------
+; -- nice to have -----------------------------------------------------------------------------------------------------------
 
 (extend-protocol IPrintWithWriter
   Frame
