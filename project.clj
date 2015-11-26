@@ -1,4 +1,4 @@
-(defproject binaryage/pure-frame "0.1.0-SNAPSHOT"
+(defproject binaryage/pure-frame "0.1.0"
   :description "A Clojurescript MVC-like Framework For Writing SPAs Using Reagent."
   :url "https://github.com/binaryage/pure-frame.git"
   :license {:name "MIT"}
