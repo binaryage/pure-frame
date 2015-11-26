@@ -75,7 +75,7 @@
         handler-fn (get-in frame [:subscriptions subscription-id])]
     (if (nil? handler-fn)
       (error frame
-        "re-frame: no subscription handler registered for: \"" subscription-id "\".  Returning a nil subscription.")
+             "re-frame: no subscription handler registered for: \"" subscription-id "\".  Returning a nil subscription.")
       (apply handler-fn subscription-spec))))
 
 ; -- utilities ------------------------------------------------------------------------------------------------------
@@ -89,26 +89,26 @@
 ;
 ; see http://clojure.org/transducers[1]
 
-(defn frame-transducer-factory [frame]                                                                                ; <- returns a function which is able to build transducers
-  (fn [db-selector]                                                                                                   ; <- returns a transducer parametrized with db-selector
-    (fn [reducing-fn]                                                                                                 ; <- this is a transducer
+(defn frame-transducer-factory [frame]                                                                                        ; <- returns a function which is able to build transducers
+  (fn [db-selector]                                                                                                           ; <- returns a transducer parametrized with db-selector
+    (fn [reducing-fn]                                                                                                         ; <- this is a transducer
       (fn
-        ([] (reducing-fn))                                                                                            ; transduction init, see [1]
-        ([result] (reducing-fn result))                                                                               ; transduction completion, see [1]
-        ([state event]                                                                                                ; transduction step, see [1]
+        ([] (reducing-fn))                                                                                                    ; transduction init, see [1]
+        ([result] (reducing-fn result))                                                                                       ; transduction completion, see [1]
+        ([state event]                                                                                                        ; transduction step, see [1]
          (let [event-id (get-event-id event)
                handler-fn (event-id (:handlers frame))]
            (if (nil? handler-fn)
              (do
                (error frame "re-frame: no event handler registered for: \"" event-id "\". Ignoring.")
                state)
-             (let [old-db (db-selector state)                                                                         ; db-selector is responsible for retrieving actual db from current state
-                   new-db (handler-fn old-db event)]                                                                  ; calls selected handler (including all composed middlewares)
-               (if (nil? new-db)                                                                                      ; TODO: this test should be optional, there could be valid use-cases for nil db
+             (let [old-db (db-selector state)                                                                                 ; db-selector is responsible for retrieving actual db from current state
+                   new-db (handler-fn old-db event)]                                                                          ; calls selected handler (including all composed middlewares)
+               (if (nil? new-db)                                                                                              ; TODO: this test should be optional, there could be valid use-cases for nil db
                  (do
                    (error frame "re-frame: your handler returned nil. It should return the new db state. Ignoring.")
                    state)
-                 (reducing-fn state new-db))))))))))                                                                  ; reducing function prepares new transduction state
+                 (reducing-fn state new-db))))))))))                                                                          ; reducing function prepares new transduction state
 
 ; TODO: we should memoize this function, beause it will be usually called with same frame
 ; using something like https://github.com/clojure/core.memoize with LRU cache would be neat
@@ -130,9 +130,9 @@ outside by the process doing actual transduction. See event processing helpers b
 
 (defn process-events [frame init-db events]
   (let [reducing-fn (fn
-                      ([db-states] db-states)                                                                         ; completion
-                      ([db-states new-db]                                                                             ; in each step
-                       (conj db-states new-db)))                                                                      ; add new-db state to the vector
+                      ([db-states] db-states)                                                                                 ; completion
+                      ([db-states new-db]                                                                                     ; in each step
+                       (conj db-states new-db)))                                                                              ; add new-db state to the vector
         xform (get-frame-transducer frame last)]
     (transduce xform reducing-fn [init-db] events)))
 
@@ -142,18 +142,18 @@ outside by the process doing actual transduction. See event processing helpers b
 
 (defn process-events-on-atom! [frame db-atom events]
   (let [reducing-fn (fn
-                      ([db-atom] db-atom)                                                                             ; completion
-                      ([db-atom new-db]                                                                               ; in each step
-                       (reset-if-changed! db-atom new-db)                                                             ; commit new-db to atom
+                      ([db-atom] db-atom)                                                                                     ; completion
+                      ([db-atom new-db]                                                                                       ; in each step
+                       (reset-if-changed! db-atom new-db)                                                                     ; commit new-db to atom
                        db-atom))
         xform (get-frame-transducer frame deref)]
     (transduce xform reducing-fn db-atom events)))
 
 (defn process-events-on-atom-with-coallesced-write! [frame db-atom events]
   (let [reducing-fn (fn
-                      ([final-db]                                                                                     ; completion
-                       (reset-if-changed! db-atom final-db))                                                          ; commit final-db to atom
-                      ([_old-db new-db] new-db))                                                                      ; simply carry-on with new-db as our new state
+                      ([final-db]                                                                                             ; completion
+                       (reset-if-changed! db-atom final-db))                                                                  ; commit final-db to atom
+                      ([_old-db new-db] new-db))                                                                              ; simply carry-on with new-db as our new state
         xform (get-frame-transducer frame identity)]
     (transduce xform reducing-fn @db-atom events)))
 

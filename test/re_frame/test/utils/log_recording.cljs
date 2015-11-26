@@ -5,10 +5,10 @@
 (defn record-log-call [key args]
   (swap! log-transcript (fn [transcript]
                           (update transcript key
-                            (fn [record]
-                              (-> (or record {})
-                                (update :counter inc)
-                                (update :history conj (vec args))))))))
+                                  (fn [record]
+                                    (-> (or record {})
+                                        (update :counter inc)
+                                        (update :history conj (vec args))))))))
 
 (defn last-log* [key]
   (last (get-in @log-transcript [key :history])))

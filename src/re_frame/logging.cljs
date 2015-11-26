@@ -25,15 +25,15 @@
   (.apply (.-error js/console) js/console (into-array args)))
 
 (defn js-console-group [& args]
-  (if (.-group js/console)                                                                                            ; group does not exist  < IE 11
+  (if (.-group js/console)                                                                                                    ; group does not exist  < IE 11
     (.apply (.-group js/console) js/console (into-array args))
     (apply js-console-log args)))
 
 (defn js-console-group-end [& args]
-  (if (.-groupEnd js/console)                                                                                         ; groupEnd does not exist  < IE 11
+  (if (.-groupEnd js/console)                                                                                                 ; groupEnd does not exist  < IE 11
     (.apply (.-groupEnd js/console) js/console (into-array args))))
 
-; -- Logging --------------------------------------------------------------------------------------------------------
+; -- Logging ----------------------------------------------------------------------------------------------------------------
 ;
 ; re-frame internally uses a set of logging functions which, by default,
 ; print to js/console.

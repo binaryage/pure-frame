@@ -25,7 +25,7 @@
 ; the default instance of re-frame
 (def app-frame (v041-api/make-frame-atom))
 
-; --  API  ----------------------------------------------------------------------------------------------------------
+; --  API  ------------------------------------------------------------------------------------------------------------------
 
 (def set-loggers! (partial v041-api/set-loggers! app-frame))
 (def register-sub (partial v041-api/register-sub app-frame))
@@ -48,7 +48,7 @@ Usage example:
    (dispatch-sync [:delete-item 42])"
   (partial v041-api/dispatch-sync app-db app-frame))
 
-; --  router  -------------------------------------------------------------------------------------------------------
+; --  router  ---------------------------------------------------------------------------------------------------------------
 
 (when (= config/core-implements "v041")
   ; the default event queue
@@ -61,7 +61,7 @@ Usage example:
   (def event-queue (router/make-event-queue app-frame app-db))
   (def dispatch (partial router/dispatch event-queue app-frame)))
 
-; --  middleware  ---------------------------------------------------------------------------------------------------
+; --  middleware  -----------------------------------------------------------------------------------------------------------
 
 (def debug (middleware/debug app-frame))
 (def path (middleware/path app-frame))
@@ -71,7 +71,7 @@ Usage example:
 (def log-ex (middleware/log-ex app-frame))
 (def on-changes (middleware/on-changes app-frame))
 
-; --  event processing  ---------------------------------------------------------------------------------------------
+; --  event processing  -----------------------------------------------------------------------------------------------------
 
 (when (= config/core-implements "v041")
   (if config/run-loop-automatically

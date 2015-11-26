@@ -19,12 +19,12 @@
     (fn log-ex-handler
       [db v]
       (warn @frame-atom
-        (str
-          "re-frame: use of \"log-ex\" is deprecated. You don't need it any more IF YOU ARE USING CHROME 44."
-          " Chrome now seems to now produce good stack traces."))
+            (str
+              "re-frame: use of \"log-ex\" is deprecated. You don't need it any more IF YOU ARE USING CHROME 44."
+              " Chrome now seems to now produce good stack traces."))
       (try
         (handler db v)
-        (catch :default e                                                                                             ; ooops, handler threw
+        (catch :default e                                                                                                     ; ooops, handler threw
           (do
             (error @frame-atom (.-stack e))
             (throw e)))))))
@@ -64,7 +64,7 @@
       (handler db (vec (rest v))))))
 
 
-; -- Middleware Factories -------------------------------------------------------------------------------------------
+; -- Middleware Factories ---------------------------------------------------------------------------------------------------
 
 (defn path
   "A middleware factory which supplies a sub-tree of `db` to the handler.
@@ -131,7 +131,7 @@
       (fn after-handler
         [db v]
         (let [new-db (handler db v)]
-          (f new-db v)                                                                                                ; call f for side effects
+          (f new-db v)                                                                                                        ; call f for side effects
           new-db)))))
 
 

@@ -12,7 +12,7 @@
 (defn make-frame-atom [& args]
   (atom (apply frame/make-frame args)))
 
-; -- re-frame 0.4.1 interface  --------------------------------------------------------------------------------------
+; -- re-frame 0.4.1 interface  ----------------------------------------------------------------------------------------------
 
 (defn set-loggers! [frame-atom new-loggers]
   (swap! frame-atom #(frame/set-loggers % new-loggers)))
@@ -31,7 +31,7 @@
         handler-fn (get-in @frame-atom [:subscriptions subscription-id])]
     (if (nil? handler-fn)
       (error @frame-atom
-        "re-frame: no subscription handler registered for: \"" subscription-id "\".  Returning a nil subscription.")
+             "re-frame: no subscription handler registered for: \"" subscription-id "\".  Returning a nil subscription.")
       (handler-fn db-atom subscription-spec))))
 
 (def subscribe legacy-subscribe)
@@ -43,12 +43,12 @@
   ([frame-atom event-id handler-fn]
    (swap! frame-atom #(frame/register-event-handler % event-id handler-fn)))
   ([frame-atom event-id middleware handler-fn]
-   (if-let [mid-ware (utils/compose-middleware @frame-atom middleware)]                                               ; compose the middleware
-     (register-handler frame-atom event-id (mid-ware handler-fn)))))                                                  ; wrap the handler in the middleware
+   (if-let [mid-ware (utils/compose-middleware @frame-atom middleware)]                                                       ; compose the middleware
+     (register-handler frame-atom event-id (mid-ware handler-fn)))))                                                          ; wrap the handler in the middleware
 
 (defn unregister-handler [frame-atom event-id]
   (swap! frame-atom #(frame/unregister-event-handler % event-id)))
 
 (defn dispatch-sync [db-atom frame-atom event]
   (frame/process-event-on-atom! @frame-atom db-atom event)
-  nil)                                                                                                                ; Ensure nil return. See https://github.com/Day8/re-frame/wiki/Beware-Returning-False
+  nil)                                                                                                                        ; Ensure nil return. See https://github.com/Day8/re-frame/wiki/Beware-Returning-False

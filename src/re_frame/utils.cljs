@@ -25,7 +25,7 @@
   (if-not (identical? @db-atom new-db-state)
     (reset! db-atom new-db-state)))
 
-; -- composing middleware  ------------------------------------------------------------------------------------------
+; -- composing middleware  --------------------------------------------------------------------------------------------------
 
 (defn compose-middleware
   "Given a vector of middleware, filter out any nils, and use \"comp\" to compose the elements.
@@ -37,6 +37,6 @@ Filtering out nils allows us to create Middleware conditionally like this:
   [frame what]
   (let [spec (if (seqable? what) (seq what) what)]
     (cond
-      (fn? spec) spec                                                                                                 ; assumed to be existing middleware
+      (fn? spec) spec                                                                                                         ; assumed to be existing middleware
       (seq? spec) (apply comp (remove nil? (flatten spec)))
       :else (warn frame "re-frame: comp-middleware expects a vector, got: " what))))

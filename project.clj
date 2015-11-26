@@ -24,7 +24,7 @@
                                :compiler     {:output-to     "run/compiled/latest/test.js"
                                               :source-map    "run/compiled/latest/test.js.map"
                                               :output-dir    "run/compiled/latest/test"
-                                              :optimizations :simple                                                  ; https://github.com/cemerick/clojurescript.test/issues/68
+                                              :optimizations :simple                                                          ; https://github.com/cemerick/clojurescript.test/issues/68
                                               :pretty-print  true}}
                               {:id           "test_v041"
                                :source-paths ["src" "test"]
@@ -32,11 +32,11 @@
                                               :output-to       "run/compiled/v041/test.js"
                                               :source-map      "run/compiled/v041/test.js.map"
                                               :output-dir      "run/compiled/v041/test"
-                                              :optimizations   :simple                                                ; https://github.com/cemerick/clojurescript.test/issues/68
+                                              :optimizations   :simple                                                        ; https://github.com/cemerick/clojurescript.test/issues/68
                                               :pretty-print    true}}]
 
               :test-commands {"phantom_latest" ["phantomjs" :runner "run/compiled/latest/test.js"]
-                              "phantom_v041"   ["phantomjs" :runner "run/compiled/v041/test.js"]}}                    ; doesn't work with phantomjs < 2.0.0
+                              "phantom_v041"   ["phantomjs" :runner "run/compiled/v041/test.js"]}}                            ; doesn't work with phantomjs < 2.0.0
 
   :aliases {"auto" ["do" "clean," "cljsbuild" "clean," "cljsbuild" "auto" "demo,"]
             "once" ["do" "clean," "cljsbuild" "clean," "cljsbuild" "once" "demo,"]

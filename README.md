@@ -10,7 +10,7 @@ for other scenarios as well. For example with pure-frame you can easily replace 
 implement underlying storage for app-db in a different way.
 
 I ended up implementing re-frame instance as a value with a set of pure functions to transform it. Event processor
-is expressed as a tranducer which allows great flexibility.
+is expressed as a transducer which allows great flexibility.
 
 In your project you should require `re-frame.frame` and call `make-frame` to create your own re-frame instance(s).
 
