@@ -2,15 +2,15 @@
   :description "A Clojurescript MVC-like Framework For Writing SPAs Using Reagent."
   :url "https://github.com/binaryage/pure-frame.git"
   :license {:name "MIT"}
-  :dependencies [[org.clojure/clojure "1.7.0"]
-                 [org.clojure/clojurescript "1.7.145"]
-                 [org.clojure/core.async "0.2.371"]
+  :dependencies [[org.clojure/clojure "1.8.0"]
+                 [org.clojure/clojurescript "1.9.542"]
+                 [org.clojure/core.async "0.3.442"]
                  [reagent "0.5.1"]]
 
   :profiles {:debug {:debug true}
              :dev   {:dependencies [[spellhouse/clairvoyant "0.0-48-gf5e59d3"]]
-                     :plugins      [[lein-cljsbuild "1.1.0"]
-                                    [lein-figwheel "0.3.8"]
+                     :plugins      [[lein-cljsbuild "1.1.6"]
+                                    [lein-figwheel "0.5.10"]
                                     [com.cemerick/clojurescript.test "0.3.3"]]}}
 
   :clean-targets [:target-path "run/compiled"]
